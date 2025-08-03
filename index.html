@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Monitoreo de Desastres Naturales</title>
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Fallback styles in case external CSS fails */
+        body { font-family: Arial, sans-serif; margin: 0; }
+        #map { height: 500px; width: 100%; background: #f0f0f0; }
+        .loading-fallback { text-align: center; padding: 50px; }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <h1>Sistema de Monitoreo de Desastres Naturales</h1>
+            <p>Visualización de zonas afectadas mediante imágenes satelitales Copernicus</p>
+        </div>
+    </header>
+
+    <!-- Map Container -->
+    <div id="map"></div>
+
+    <!-- Sidebar / Modal for event details -->
+    <div id="event-details" class="hidden">
+        <div class="detail-container">
+            <button id="btn-close" class="close-btn">&times;</button>
+            <h2 id="event-title"></h2>
+            <div class="event-info">
+                <p><strong>Tipo:</strong> <span id="event-type"></span></p>
+                <p><strong>Nivel de Riesgo:</strong> <span id="event-risk" class="risk-badge"></span></p>
+                <p><strong>Coordenadas:</strong> <span id="event-coords"></span></p>
+                <p><strong>Fecha:</strong> <span id="event-date"></span></p>
+            </div>
+            
+            <div class="image-section">
+                <h3>Imagen Satelital</h3>
+                <img id="event-image" alt="Imagen satelital del evento" />
+            </div>
+            
+            <p id="event-description"></p>
+            
+            <!-- Botones para descargar reporte y ver EO Browser -->
+            <div class="buttons">
+                <button id="btn-download" class="btn-primary">
+                    📄 Descargar Reporte
+                </button>
+                <button id="btn-eo-browser" class="btn-secondary">
+                    🌍 Ver en EO Browser
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading indicator -->
+    <div id="loading" class="loading hidden">
+        <div class="loading-spinner"></div>
+        <p>Cargando datos...</p>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <!-- jsPDF Library for PDF generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <!-- Loading indicator script -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show loading message
+            console.log('DOM loaded, initializing...');
+            
+            // Check if Leaflet loaded
+            if (typeof L === 'undefined') {
+                console.error('Leaflet failed to load');
+                document.getElementById('map').innerHTML = '<div class="loading-fallback">Error: No se pudo cargar el mapa. Verifique su conexión a internet.</div>';
+                return;
+            }
+            
+            // Check if jsPDF loaded
+            if (typeof window.jspdf === 'undefined') {
+                console.warn('jsPDF failed to load - PDF functionality will be limited');
+            }
+            
+            console.log('Libraries loaded successfully');
+        });
+    </script>
+    
+    <!-- Custom Script -->
+    <script src="main.js"></script>
+</body>
+</html>
